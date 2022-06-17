@@ -15,3 +15,7 @@
   width: 350px;
   margin-right: 20px;
 }
+
+.app-add-form .error {
+  border: 2px solid rgb(204, 5, 5);
+}

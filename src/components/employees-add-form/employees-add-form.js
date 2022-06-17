@@ -8,6 +8,7 @@ class EmployeesAddForm extends Component {
         this.state = {
             name: '',
             salary: '',
+            error: false
         };
     }
 
@@ -21,17 +22,24 @@ class EmployeesAddForm extends Component {
         e.preventDefault();
         const { name, salary } = this.state;
 
-        if (name.length >= 3 && salary > 0) {
+        if (name.length >= 2 && salary > 0) {
             this.props.onAddItem(name, salary)
-            this.setState({
+            this.setState(() => ({
                 name: '',
                 salary: '',
-            });
+                error: false,
+            }));
+        } else {
+            this.setState((state) => ({
+                ...state,
+                error: true,
+            }));
         }
     }
 
     render() {
-        const { name, salary } = this.state;
+        const { name, salary, error } = this.state;
+        const errorClass = error ? 'error' : '';
 
         return (
             <div className="app-add-form">
@@ -40,19 +48,23 @@ class EmployeesAddForm extends Component {
                     className="add-form d-flex"
                     onSubmit={this.onSubmit}>
                     <input type="text"
-                        className="form-control new-post-label"
+                        className={`form-control new-post-label ${name.length <= 2 ? errorClass : ''}`}
                         placeholder="Как его зовут?" 
                         name='name'
                         value={name}
                         onChange={this.onValueChange}/>
                     <input type="number"
-                        className="form-control new-post-label"
+                        step="1" 
+                        min="1" 
+                        max="100000"
+                        className={`form-control new-post-label ${salary <= 0 ? errorClass : ''}`}
                         placeholder="З/П в $?" 
                         name='salary'
                         value={salary}
                         onChange={this.onValueChange}/>
     
-                    <button type="submit"
+                    <button 
+                        type="submit"
                         className="btn btn-outline-light">Добавить</button>
                 </form>
             </div>
